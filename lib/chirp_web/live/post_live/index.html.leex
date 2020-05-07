@@ -1,0 +1,28 @@
+<h1>Listing Posts</h1>
+
+<%= if @live_action in [:new, :edit] do %>
+  <%= live_modal @socket, ChirpWeb.PostLive.FormComponent,
+    id: @post.id || :new,
+    title: @page_title,
+    action: @live_action,
+    post: @post,
+    return_to: Routes.post_index_path(@socket, :index) %>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Username</th>
+      <th>Body</th>
+      <th>Likes count</th>
+      <th>Reposts count</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <%= for post <- @posts do %>
+    <%= live_component @socket, ChirpWeb.PostLive.PostComponent, id: post.id, post: post %>
+  <%= end %>
+</table>
+
+<span><%= live_patch "New Post", to: Routes.post_index_path(@socket, :new) %></span>
